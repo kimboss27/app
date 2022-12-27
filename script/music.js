@@ -37,9 +37,13 @@ musicAudio.addEventListener("timeupdate", (event) => {
     let duration = event.target.duration;
     let progressRatio = (current / duration) * 100; //백분율 계산
     progressBar.style.width = `${progressRatio}%`
-    //재생시간표시
-    //진행바 넓이지정
-    musicAudio.addEventListener("loadeddata", () => {
+
+    let currentMin=Math.floor(current/60);
+    let currentSec=Math.floor(current%60);
+    if(currentSec<10){currentSec=`0${currentSec}`;}
+    playTime.innerHTML=`${currentMin}:${currentSec}`;
+
+    musicAudio.addEventListener("loadeddata", (e) => { console.log("ch");
         let totalDuration = musicAudio.duration;
         console.log(totalDuration, duration)
         let totalMin = Math.floor(totalDuration/60);
@@ -71,22 +75,22 @@ prveBtn.addEventListener("click",()=>{
 nexBtn.addEventListener("click",()=>{
     nextMusic();
 });
-const mRepeat=musicWrap/queueMicrotask("#repeat-btn");
-musicAudio.addEventListener("ended",()=>{
-    let getText=mRepeat.innerText;
-    if(getText=="repeat"){nextMusic();}
-});
 /*
     obj.clientWidth, clientHeight (padding포함 크기인식)
     obj.offsetWidth, offsetHeight (bordervhgka 크기인식)
     obj.getBoundingClientRect() - .width / .height (border+padding포함)
 */
-progressBar.addEventListener("click",(e)=>{
+progressive.addEventListener("click",(e)=>{
     let maxWidth=progressive.clientWidth;
     let clickXposition=e.offsetX;
     let totalDuration=musicAudio.duration;
     musicAudio.currentTime=(clickXposition/maxWidth)*totalDuration;
     musicPlay();
+});
+const mRepaet=musicWrap.querySelector('#repeat-btn');
+musicAudio.addEventListener("ended",()=>{
+    let getText=mRepaet.innerText;
+    if(getText=="repeat"){nextMusic();}
 });
 const musicList=[
     {
